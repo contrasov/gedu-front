@@ -5,39 +5,40 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { logout } from "@/services/AuthService";
+import { useRoute } from "vue-router";
 
-// Menu items.
+const route = useRoute();
+
 const items = [
   {
     title: "Inicio",
-    url: "#",
+    url: "/dashboard",
     icon: LayoutPanelLeft,
   },
   {
     title: "Turmas",
-    url: "#",
+    url: "/classes",
     icon: BookCopy,
   },
   {
     title: "Cursos",
-    url: "#",
+    url: "/courses",
     icon: University,
   },
   {
     title: "Alunos",
-    url: "#",
+    url: "/students",
     icon: UsersRound,
   },
   {
     title: "Professores",
-    url: "#",
+    url: "/teachers",
     icon: GraduationCap,
   },
 ];
@@ -65,12 +66,17 @@ const logoutGedu = async () => {
         <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-              <SidebarMenuItem v-for="item in items" :key="item.title">
+              <SidebarMenuItem
+                v-for="item in items"
+                :key="item.title"
+                :url="item.url"
+                :class="route.path === item.url ? 'bg-hover-sidebar rounded-md' : ''"
+              >
                 <SidebarMenuButton asChild>
-                    <a :href="item.url">
-                      <component :is="item.icon" class="text-stroke-1" />
+                    <router-link :to="item.url" :class="route.path === item.url ? 'text-white' : ''">
+                      <component :is="item.icon" :class="route.path === item.url ? 'text-primary-color' : ''"/>
                       <span>{{item.title}}</span>
-                    </a>
+                    </router-link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
           </SidebarMenu>
