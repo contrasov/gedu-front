@@ -3,6 +3,11 @@ import type { RouteRecordRaw } from 'vue-router';
 import Login from "../Pages/Auth/Login.vue";
 import Register from "@/Pages/Auth/Register.vue";
 import Dashboard from "@/Pages/Dashboard.vue";
+import HomeClasses from "@/Pages/Classes/HomeClasses.vue";
+import HomeCourses from "@/Pages/Courses/HomeCourses.vue";
+import HomeStudents from "@/Pages/Students/HomeStudents.vue";
+import HomeTeachers from "@/Pages/Teachers/HomeTeachers.vue";
+import HomeSettings from "@/Pages/Settings/HomeSettings.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -22,7 +27,37 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Dashboard',
         component: Dashboard,
         meta: {title: 'Painel Inicial', requiresAuth: true}
-    }
+    },
+    {
+        path: '/classes',
+        name: 'Class',
+        component: HomeClasses,
+        meta: {title: 'Turmas', requiresAuth: true}
+    },
+    {
+        path: '/courses',
+        name: 'Course',
+        component: HomeCourses,
+        meta: {title: 'Cursos', requiresAuth: true}
+    },
+    {
+        path: '/students',
+        name: 'Student',
+        component: HomeStudents,
+        meta: {title: 'Alunos', requiresAuth: true}
+    },
+    {
+        path: '/teachers',
+        name: 'Teacher',
+        component: HomeTeachers,
+        meta: {title: 'Professores', requiresAuth: true}
+    },
+    {
+        path: '/settings',
+        name: 'Setting',
+        component: HomeSettings,
+        meta: {title: 'Configurações', requiresAuth: true}
+    },
 ]
 
 const router = createRouter({

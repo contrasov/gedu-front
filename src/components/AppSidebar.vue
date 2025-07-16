@@ -88,10 +88,10 @@ const logoutGedu = async () => {
       <SidebarMenu class="mb-3">
         <SidebarMenuItem v-for="item in footerItems" :key="item.title" :url="item.url">
           <SidebarMenuButton asChild>
-            <a :href="item.url">
+            <router-link :to="item.url">
               <component :is="item.icon" />
               <span>{{ item.title }}</span>
-            </a>
+            </router-link>
           </SidebarMenuButton>
         </SidebarMenuItem>
         <button class="logout" @click="logoutGedu()">
