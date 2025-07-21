@@ -1,37 +1,40 @@
 <script setup lang="ts">
 import CardClass from '@/components/CardClass.vue';
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layout/AppLayout.vue';
-import { getClasses } from '@/services/ClassesService';
-import { onMounted, ref } from 'vue';
+import { getClasses, type ClassInfo } from '@/services/ClassesService';
 
-const classes = ref([])
+import { onMounted, ref } from 'vue';
+import CreateClass from '@/components/Classes/CreateClass.vue';
+import EnrollmentClass from '@/components/Classes/EnrollmentClass.vue';
+
+const classes = ref<ClassInfo[]>([])
 
 const listClasses = async () => {
     try {
-       classes.value = await getClasses()
+        classes.value = await getClasses()
     } catch (e) {
         console.error('Erro ao buscar turmas:', e)
     }
 }
 
-onMounted(()=> {
+onMounted(() => {
     listClasses();
 })
-
 </script>
 
 <template>
     <AppLayout>
-        <div class="flex flex-row justify-between">
-            <h1 class="font-bold">Turmas</h1>
-            <Button>Fazer Matrícula</Button>
+        <div class="flex flex-row justify-between mb-6">
+            <h1 class="text-2xl font-bold">Turmas</h1>
+            <div class="flex flex-row gap-2">
+                <CreateClass />
+                <EnrollmentClass/>
+            </div>
         </div>
-        <section class="grid grid-cols-3">
-            <CardClass 
-                v-for="classItem in classes" 
-                :class-item="classItem" 
-            />
+
+        <!-- Lista de Turmas -->
+        <section class="grid grid-cols-3 gap-4">
+            <CardClass v-for="classItem in classes" :key="classItem._id" :class-item="classItem" />
         </section>
     </AppLayout>
 </template>

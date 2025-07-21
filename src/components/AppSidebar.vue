@@ -22,7 +22,7 @@ const items = [
     icon: LayoutPanelLeft,
   },
   {
-    title: "Turmas",
+    title: "Minhas Turmas",
     url: "/classes",
     icon: BookCopy,
   },

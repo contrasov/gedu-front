@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { BookCopy, GraduationCap, CalendarDays } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 const { classItem } = defineProps<{
     classItem: {
+        _id: string,
         name: string;
         subjectId: {
             code: string;
@@ -46,17 +48,24 @@ const groupedSchedule = computed(() => {
 
     return result;
 });
+
+const router = useRouter()
+
+const goToClass = () => {
+    router.push(`/classes/${classItem._id}`)
+}
+
 </script>
 
 <template>
-    <div class="card hover-card flex flex-col gap-2">
+    <div class="card hover-card flex flex-col gap-2" @click="goToClass">
         <div class="flex flex-row gap-2 items-center">
             <span class="bg-primary-color p-2 rounded-md text-white" >
                 <BookCopy class="h-5 w-5"/>
             </span>
             <div class="flex flex-col">
                 <span class="flex flex-row gap-2 items-center">
-                    <h1>{{ classItem.name }}</h1>
+                    <h1 class="text-sm" >{{ classItem.name }}</h1>
                     <p class="text-xs font-medium text-stroke-2">{{ classItem.subjectId.code }}</p>
                 </span>
                 <span class="flex flex-row gap-1 items-center">
@@ -67,7 +76,7 @@ const groupedSchedule = computed(() => {
         </div>
         <div class="flex flex-row gap-1 items-center">
             <CalendarDays class="h-4 w-fit"/>
-            <div class="flex flex-col text-sm">
+            <div class="flex flex-col text-xs">
                 <h3 v-for="(scheduleGroup, index) in groupedSchedule" :key="index">
                     <span class="font-bold">{{ scheduleGroup.days.join(' e ') }}</span> {{ scheduleGroup.time }}
                 </h3>

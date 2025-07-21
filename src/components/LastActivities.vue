@@ -4,25 +4,11 @@ import { BookCheck, BookAlert } from 'lucide-vue-next';
 const activities = [
     {
         id: 1,
-        name: 'Estudar Vue.js',
-        class: 'Front-end',
-        limitDate: '2025-07-20T23:59',
-        status: 'pending'
-    },
-    {
-        id: 2,
-        name: 'Praticar TypeScript',
-        class: 'Back-end',
+        name: 'Praticar SQL',
+        class: 'Banco de Dados',
         limitDate: '2025-07-22T23:59',
         status: 'pending'
     },
-    {
-        id: 3,
-        name: 'Revisar Expressões Regulares',
-        class: 'Lógica de Programação',
-        limitDate: '2025-07-25T23:59',
-        status: 'done'
-    }
 ]
 
 const formatDate = (dataIso: string): string => {
@@ -41,8 +27,8 @@ const formatDate = (dataIso: string): string => {
 <template>
     <div class="card flex flex-col gap-2">
         <h1 class="font-bold">Últimas Atividades</h1>
-        <div class="flex flex-col gap-2">
-            <div class="py-[6px] px-3.5 border border-stroke-3 rounded-[6px]" v-for="task in activities" :key="task.id">
+        <div class="flex flex-col gap-2 overflow-auto">
+            <!-- <div class="py-[6px] px-3.5 border border-stroke-3 rounded-[6px]" v-for="task in activities" :key="task.id">
                 <div class="flex flex-row justify-between items-center">
                     <div class="flex flex-row gap-2 items-center">
                         <span :class="task.status === 'pending' ? 'bg-pending p-1.5 rounded-md' : 'bg-done' + ' p-1.5 rounded-md'">
@@ -59,7 +45,7 @@ const formatDate = (dataIso: string): string => {
 
                     <h2 class="text-background-primary text-xs">Entregar em: {{ formatDate(task.limitDate) }}</h2>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

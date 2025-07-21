@@ -8,6 +8,7 @@ import HomeCourses from "@/Pages/Courses/HomeCourses.vue";
 import HomeStudents from "@/Pages/Students/HomeStudents.vue";
 import HomeTeachers from "@/Pages/Teachers/HomeTeachers.vue";
 import HomeSettings from "@/Pages/Settings/HomeSettings.vue";
+import InfoClass from "@/Pages/Classes/InfoClass.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -33,6 +34,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Class',
         component: HomeClasses,
         meta: {title: 'Turmas', requiresAuth: true}
+    },
+    {
+        path: '/classes/:id',
+        name: 'ClassInfo',
+        component: InfoClass,
+        meta: {title: 'Informação da Turma', requiresAuth: true}
     },
     {
         path: '/courses',
