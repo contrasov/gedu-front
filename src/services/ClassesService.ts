@@ -38,6 +38,18 @@ export const enrollStudent = async(id: string) => {
     return response.data
 }
 
+export const unenrollStudent = async(id: string) => {
+    const token = localStorage.getItem('authToken');
+    const response = await api.delete(`/class/${id}/remove-student`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    )
+    return response.data
+}
+
 export const createClass = async (createClass: ClassData) => {
     const token = localStorage.getItem('authToken')
     const response = await api.post(`/class`, createClass, {

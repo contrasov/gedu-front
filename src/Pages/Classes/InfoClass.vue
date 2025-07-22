@@ -8,12 +8,14 @@ import {
 
 import AppLayout from '@/layout/AppLayout.vue';
 import router from '@/router/router';
-import { getInfoClass } from '@/services/ClassesService';
+import { getInfoClass, unenrollStudent } from '@/services/ClassesService';
 import { ChevronLeft, Book, BookCopy, GraduationCap, CalendarDays } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { type ClassInfo } from '@/services/ClassesService';
 import Overall from '@/components/Classes/Overall.vue';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 const route = useRoute();
 const classInfo = ref<ClassInfo | null>(null);
@@ -22,6 +24,18 @@ const fetchClassInfo = async () => {
     const id = route.params.id as string;
     classInfo.value = await getInfoClass(id);
 };
+
+const unenroll = async (id: string) => {
+    try {
+        await unenrollStudent(id)
+        router.push('/dashboard')
+    } catch (e) {
+        console.error('Erro ao cancelar matricula:', e)
+    }
+}
+
+const isDialogOpen = ref(false);
+
 
 onMounted(() => {
     fetchClassInfo();
@@ -54,8 +68,25 @@ const back = () => {
                             </span>
                         </div>
                     </div>
-                    <p class="text-xs text-stroke-2 hover:underline hover:cursor-pointer mt-[-20px]">Cancelar Matricula
-                    </p>
+                    <Dialog v-model:open="isDialogOpen">
+                        <DialogTrigger as-child>
+                            <p class="text-xs text-stroke-2 hover:underline cursor-pointer">Cancelar Matricula</p>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Confirmar Cancelamento</DialogTitle>
+                                <DialogDescription>
+                                    Tem certeza de que deseja cancelar a matrícula? Esta ação não pode ser desfeita.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose>
+                                    <Button>Cancelar</Button>
+                                </DialogClose>
+                                <Button variant="outline" @click="classInfo?._id ? unenroll(classInfo._id) : null">Confirmar</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
                 <div class="flex flex-row gap-3">
                     <div v-for="item in classInfo?.schedule" :key="item" class="text-sm flex flex-row gap-1">
@@ -97,18 +128,18 @@ const back = () => {
                 <div class="grid grid-cols-3 gap-3">
                     <div class="card">
                         <template v-if="classInfo?.studentIds?.length">
-                        <div>
-                            <div v-for="student in classInfo.studentIds" :key="student._id">
-                                <p class="font-medium">{{ student.name || student }}</p>
-                                <p class="text-sm">{{ student.email || student }}</p>
+                            <div>
+                                <div v-for="student in classInfo.studentIds" :key="student._id">
+                                    <p class="font-medium">{{ student.name || student }}</p>
+                                    <p class="text-sm">{{ student.email || student }}</p>
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <p>Nenhum Aluno ainda</p>
-                    </template>
+                        </template>
+                        <template v-else>
+                            <p>Nenhum Aluno ainda</p>
+                        </template>
+                    </div>
                 </div>
-            </div>
 
             </TabsContent>
         </Tabs>
