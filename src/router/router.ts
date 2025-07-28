@@ -9,13 +9,21 @@ import HomeStudents from "@/Pages/Students/HomeStudents.vue";
 import HomeTeachers from "@/Pages/Teachers/HomeTeachers.vue";
 import HomeSettings from "@/Pages/Settings/HomeSettings.vue";
 import InfoClass from "@/Pages/Classes/InfoClass.vue";
+import InfoCourse from "@/Pages/Courses/InfoCourse.vue";
+import { useAuth } from "@/lib/useAuth";
 
-const routes: Array<RouteRecordRaw> = [
+interface RouteMeta {
+    title: string;
+    requiresAuth?: boolean;
+    allowedRoles?: string[];
+}
+
+const routes: Array<RouteRecordRaw & { meta: RouteMeta }> = [
     {
         path: '/',
         name: 'Home',
         component: Login,
-        meta: {title: 'Login'}
+        meta: { title: 'Login' }
     },
     {
         path: '/register',
@@ -48,16 +56,22 @@ const routes: Array<RouteRecordRaw> = [
         meta: {title: 'Cursos', requiresAuth: true}
     },
     {
+        path: '/courses/:id',
+        name: 'CourseInfo',
+        component: InfoCourse,
+        meta: {title: 'Cursos', requiresAuth: true}
+    },
+    {
         path: '/students',
         name: 'Student',
         component: HomeStudents,
-        meta: {title: 'Alunos', requiresAuth: true}
+        meta: { title: 'Alunos', requiresAuth: true, allowedRoles: ['Adm', 'Teacher'] }
     },
     {
         path: '/teachers',
         name: 'Teacher',
         component: HomeTeachers,
-        meta: {title: 'Professores', requiresAuth: true}
+        meta: { title: 'Professores', requiresAuth: true, allowedRoles: ['Adm', 'Teacher'] }
     },
     {
         path: '/settings',
@@ -74,6 +88,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const authToken = localStorage.getItem('authToken');
+    const { userRole, getUserInfo } = useAuth(); 
+
+    getUserInfo();
 
     if (to.name === 'Home' && authToken) {
         next({ name: 'Dashboard' });
@@ -81,7 +98,12 @@ router.beforeEach((to, from, next) => {
         if (!authToken) {
             next({ name: 'Home' });
         } else {
-            next();
+            const allowedRoles = to.meta.allowedRoles as string[];
+            if (allowedRoles && !allowedRoles.includes(userRole.value)) {
+                next({ name: 'Dashboard' }); 
+            } else {
+                next();
+            }
         }
     } else {
         next();

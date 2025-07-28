@@ -17,7 +17,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog'
-import { getUserInfo, deleteUser, updateUser, type User } from '@/services/UsersService';
+import { getUserInfo as fetchUserInfo, deleteUser, updateUser, type User } from '@/services/UsersService';
 import { UserIcon } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { Button } from './ui/button';
@@ -25,6 +25,12 @@ import router from '@/router/router';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { type RegisterData } from '@/services/AuthService';
+import { toast } from 'vue-sonner'
+import { useAuth } from '@/lib/useAuth';
+
+const { userRole, getUserInfo } = useAuth();
+getUserInfo()
+
 
 const editUserData = ref<{ phone: string; email: string }>({ phone: '', email: '' });
 
@@ -40,7 +46,7 @@ const userInfo = ref<User | null>(null)
 
 const showInfo = async (id: string) => {
     try {
-        userInfo.value = await getUserInfo(id)
+        userInfo.value = await fetchUserInfo(id)
     } catch (e) {
         console.error('Erro ao buscar informações:', e)
     }
@@ -49,6 +55,7 @@ const showInfo = async (id: string) => {
 const userDelete = async (id: string) => {
     try {
         await deleteUser(id)
+        toast.success('Usuário deletado com sucesso!');
         router.go(0)
     } catch (e) {
         console.error('Erro ao deletar usuário:', e)
@@ -57,7 +64,7 @@ const userDelete = async (id: string) => {
 
 const updateUserInfo = async (id: string) => {
     try {
-        const currentUserInfo = await getUserInfo(id);
+        const currentUserInfo = await fetchUserInfo(id);
         
         const updatedData: RegisterData = {
             ...currentUserInfo, 
@@ -67,6 +74,7 @@ const updateUserInfo = async (id: string) => {
 
         if (editUserData.value.phone || editUserData.value.email) {
             await updateUser(id, updatedData); 
+            toast.success('Usuário atualizado com sucesso!');
             router.go(0);
         }
     } catch (e) {
@@ -116,7 +124,7 @@ onMounted(() => {
                                     <Label>Data de Nascimento:</Label>
                                     <p>{{ userInfo?.dateBirth }}</p>
                                 </span>
-                                <span class="flex flex-row justify-between">
+                                <span v-if="userRole === 'Adm'" class="flex flex-row justify-between">
                                     <Label>CPF:</Label>
                                     <p>{{ userInfo?.cpf }}</p>
                                 </span>
@@ -131,7 +139,7 @@ onMounted(() => {
                             </div>
                         </div>
 
-                        <div class="w-full flex flex-row gap-2 justify-end">
+                        <div v-if="userRole === 'Adm'" class="w-full flex flex-row gap-2 justify-end">
                             <Dialog>
                                 <DialogTrigger as-child>
                                     <Button>

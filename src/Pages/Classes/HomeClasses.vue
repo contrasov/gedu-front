@@ -6,6 +6,10 @@ import { getClasses, type ClassInfo } from '@/services/ClassesService';
 import { onMounted, ref } from 'vue';
 import CreateClass from '@/components/Classes/CreateClass.vue';
 import EnrollmentClass from '@/components/Classes/EnrollmentClass.vue';
+import { useAuth } from '@/lib/useAuth';
+
+const { userRole, getUserInfo } = useAuth();
+
 
 const classes = ref<ClassInfo[]>([])
 
@@ -17,6 +21,8 @@ const listClasses = async () => {
     }
 }
 
+getUserInfo()
+
 onMounted(() => {
     listClasses();
 })
@@ -27,8 +33,8 @@ onMounted(() => {
         <div class="flex flex-row justify-between mb-6">
             <h1 class="text-2xl font-bold">Turmas</h1>
             <div class="flex flex-row gap-2">
-                <CreateClass />
-                <EnrollmentClass/>
+                <CreateClass v-if="userRole === 'Adm'" />
+                <EnrollmentClass v-if="userRole === 'Student'"/>
             </div>
         </div>
 

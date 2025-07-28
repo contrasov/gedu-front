@@ -16,6 +16,10 @@ import { type ClassInfo } from '@/services/ClassesService';
 import Overall from '@/components/Classes/Overall.vue';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/useAuth';
+
+const { userRole , getUserInfo } = useAuth();
+getUserInfo();
 
 const route = useRoute();
 const classInfo = ref<ClassInfo | null>(null);
@@ -69,7 +73,7 @@ const back = () => {
                         </div>
                     </div>
                     <Dialog v-model:open="isDialogOpen">
-                        <DialogTrigger as-child>
+                        <DialogTrigger as-child v-if="userRole === 'Student'">
                             <p class="text-xs text-stroke-2 hover:underline cursor-pointer">Cancelar Matricula</p>
                         </DialogTrigger>
                         <DialogContent>
@@ -96,7 +100,7 @@ const back = () => {
                 </div>
             </div>
 
-            <div class="card w-[20%] font-medium">
+            <div class="card w-[20%] font-medium" v-if="userRole === 'Student'">
                 <span class="flex flex-row items-center gap-1">
                     <Book class="w-4 h-4" />
                     <p>Nota 1: --</p>

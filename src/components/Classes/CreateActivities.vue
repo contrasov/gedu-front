@@ -17,22 +17,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'vue-sonner'
 
 
-const courseData = ref<CreateCourse>({
-    name: '',
-    description: '',
-    semesterDuration: 6,
-    status: true
-})
-
-const submitCourse = async () => {
-    try {
-        await createCourse(courseData.value)
-        toast.success('Curso criado com sucesso!');
-    } catch (e) {
-        console.error('Erro ao buscar cursos:', e)
-    }
-}
-
 </script>
 
 <template>
@@ -40,32 +24,21 @@ const submitCourse = async () => {
         <Dialog>
             <DialogTrigger as-child>
                 <Button variant="outline">
-                    Criar Curso
+                    Criar Atividade
                 </Button>
             </DialogTrigger>
             <DialogContent class="sm:max-w-[625px]">
                 <DialogHeader>
-                    <DialogTitle>Criar Curso</DialogTitle>
+                    <DialogTitle>Criar uma atividade para turma</DialogTitle>
                     <DialogDescription>
                         Informe o nome, a descrição e a duração do curso em semestres.
                     </DialogDescription>
                 </DialogHeader>
                 <div class="grid gap-4 py-4">
-                    <div class="flex flex-col gap-2">
-                        <Label>Nome do Curso</Label>
-                        <Input v-model="courseData.name" />
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <Label>Descrição para o curso</Label>
-                        <Textarea v-model="courseData.description" />
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <Label>Duração</Label>
-                        <Input type="number" v-model="courseData.semesterDuration" />
-                    </div>
+
                 </div>
                 <DialogFooter>
-                    <Button type="submit" @click="submitCourse">
+                    <Button type="submit">
                         Criar
                     </Button>
                 </DialogFooter>

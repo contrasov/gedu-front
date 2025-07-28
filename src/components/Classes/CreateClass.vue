@@ -23,6 +23,7 @@ import { getCoursers, type Course } from '@/services/CoursesService';
 import { ref, onMounted, watch } from 'vue';
 import { getTeachers, type User } from '@/services/UsersService';
 import { createClass, type ClassData } from '@/services/ClassesService';
+import { toast } from 'vue-sonner'
 
 const courses = ref<Course[]>([])
 const teachers = ref<User[]>([])
@@ -69,6 +70,7 @@ const submitClass = async () => {
         classData.value.schedule = formattedSchedule;
 
         await createClass(classData.value)
+        toast.success('Turma criada com sucesso!');
     } catch (e) {
         console.error('Erro ao criar a turma:', e)
     }

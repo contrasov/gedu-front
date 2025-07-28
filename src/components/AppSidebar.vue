@@ -12,8 +12,12 @@ import {
 } from "@/components/ui/sidebar"
 import { logout } from "@/services/AuthService";
 import { useRoute } from "vue-router";
+import { useAuth } from "@/lib/useAuth";
 
 const route = useRoute();
+
+const { userRole, getUserInfo } = useAuth();
+getUserInfo();
 
 const items = [
   {
@@ -31,16 +35,18 @@ const items = [
     url: "/courses",
     icon: University,
   },
-  {
-    title: "Alunos",
-    url: "/students",
-    icon: UsersRound,
-  },
-  {
-    title: "Professores",
-    url: "/teachers",
-    icon: GraduationCap,
-  },
+  ...(userRole.value !== 'Student' ? [
+    {
+      title: "Professores",
+      url: "/teachers",
+      icon: GraduationCap,
+    },
+    ...(userRole.value !== 'Teacher' ? [{
+      title: "Alunos",
+      url: "/students",
+      icon: UsersRound,
+    }] : []),
+  ] : []),
 ];
 
 const footerItems = [
@@ -60,25 +66,21 @@ const logoutGedu = async () => {
 <template>
   <Sidebar>
     <SidebarContent>
-        <div class="pl-4">
-            <img class="h-10 mt-4" src="@/assets/logoWhite.svg" alt="Gedu">
-        </div>
-        <SidebarGroup>
+      <div class="pl-4">
+        <img class="h-10 mt-4" src="@/assets/logoWhite.svg" alt="Gedu">
+      </div>
+      <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-              <SidebarMenuItem
-                v-for="item in items"
-                :key="item.title"
-                :url="item.url"
-                :class="route.path === item.url ? 'bg-hover-sidebar rounded-md' : ''"
-              >
-                <SidebarMenuButton asChild>
-                    <router-link :to="item.url" :class="route.path === item.url ? 'text-white' : ''">
-                      <component :is="item.icon" :class="route.path === item.url ? 'text-primary-color' : ''"/>
-                      <span>{{item.title}}</span>
-                    </router-link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+            <SidebarMenuItem v-for="item in items" :key="item.title" :url="item.url"
+              :class="route.path === item.url ? 'bg-hover-sidebar rounded-md' : ''">
+              <SidebarMenuButton asChild>
+                <router-link :to="item.url" :class="route.path === item.url ? 'text-white' : ''">
+                  <component :is="item.icon" :class="route.path === item.url ? 'text-primary-color' : ''" />
+                  <span>{{ item.title }}</span>
+                </router-link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
@@ -86,10 +88,11 @@ const logoutGedu = async () => {
 
     <SidebarFooter>
       <SidebarMenu class="mb-3">
-        <SidebarMenuItem v-for="item in footerItems" :key="item.title" :url="item.url">
+        <SidebarMenuItem v-for="item in footerItems" :key="item.title" :url="item.url"
+          :class="route.path === item.url ? 'bg-hover-sidebar rounded-md' : ''">
           <SidebarMenuButton asChild>
-            <router-link :to="item.url">
-              <component :is="item.icon" />
+            <router-link :to="item.url" :class="route.path === item.url ? 'text-white' : ''">
+              <component :is="item.icon" :class="route.path === item.url ? 'text-primary-color' : ''" />
               <span>{{ item.title }}</span>
             </router-link>
           </SidebarMenuButton>

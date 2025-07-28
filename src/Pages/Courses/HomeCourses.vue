@@ -5,8 +5,12 @@ import { onMounted, ref } from 'vue';
 import CreateCourse from '@/components/courses/CreateCourse.vue';
 import { getCoursers, type Course } from '@/services/CoursesService';
 import CardCourse from '@/components/CardCourse.vue';
+import { useAuth } from '@/lib/useAuth';
 
 const courses = ref<Course[]>([])
+
+const { userRole, getUserInfo } = useAuth();
+
 
 const listCourses = async () => {
     try {
@@ -15,6 +19,8 @@ const listCourses = async () => {
         console.error('Erro ao buscar turmas:', e)
     }
 }
+
+getUserInfo()
 
 onMounted(() => {
     listCourses();
@@ -26,7 +32,7 @@ onMounted(() => {
         <div class="flex flex-row justify-between mb-6">
             <h1 class="text-2xl font-bold">Cursos</h1>
             <div class="flex flex-row gap-2">
-                <CreateCourse/>
+                <CreateCourse v-if="userRole === 'Adm'"/>
             </div>
         </div>
 
