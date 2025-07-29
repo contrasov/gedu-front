@@ -8,7 +8,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
         <SidebarProvider>
             <AppSidebar />
             <section class="bg-background-secondary w-full p-4 m-3 rounded-md">
-                <!-- <SidebarTrigger/> -->
+                <SidebarTrigger class="hidden max-md:block h-10" />
                 <slot/>
             </section>
         </SidebarProvider>

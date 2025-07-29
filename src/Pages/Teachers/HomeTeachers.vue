@@ -27,7 +27,7 @@ onMounted(() => {
         </div>
 
         <!-- Lista de Turmas -->
-        <section class="grid grid-cols-3 gap-4">
+        <section class="grid grid-cols-3 gap-4 max-md:grid-cols-1">
             <CardTeachers v-for="userItem in teachers" :key="userItem._id" :user-item="userItem" />
         </section>
     </AppLayout>

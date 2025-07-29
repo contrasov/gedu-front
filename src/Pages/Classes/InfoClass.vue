@@ -40,7 +40,6 @@ const unenroll = async (id: string) => {
 
 const isDialogOpen = ref(false);
 
-
 onMounted(() => {
     fetchClassInfo();
 });
@@ -99,21 +98,6 @@ const back = () => {
                     </div>
                 </div>
             </div>
-
-            <div class="card w-[20%] font-medium" v-if="userRole === 'Student'">
-                <span class="flex flex-row items-center gap-1">
-                    <Book class="w-4 h-4" />
-                    <p>Nota 1: --</p>
-                </span>
-                <span class="flex flex-row items-center gap-1">
-                    <Book class="w-4 h-4" />
-                    <p>Nota 2: --</p>
-                </span>
-                <span class="flex flex-row items-center gap-1">
-                    <Book class="w-4 h-4" />
-                    <p>Nota Final: --</p>
-                </span>
-            </div>
         </div>
 
         <Tabs default-value="all" class="mt-2">
@@ -126,14 +110,14 @@ const back = () => {
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="all">
-                <Overall />
+                <Overall :studentIds="classInfo?.studentIds || []"/>
             </TabsContent>
             <TabsContent value="participants">
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="card">
+                <div class="w-full">
+                    <div class="w-full">
                         <template v-if="classInfo?.studentIds?.length">
-                            <div>
-                                <div v-for="student in classInfo.studentIds" :key="student._id">
+                            <div class="gap-3 grid grid-cols-2">
+                                <div class="card" v-for="student in classInfo.studentIds" :key="student._id">
                                     <p class="font-medium">{{ student.name || student }}</p>
                                     <p class="text-sm">{{ student.email || student }}</p>
                                 </div>

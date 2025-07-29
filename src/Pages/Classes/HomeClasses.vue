@@ -39,7 +39,7 @@ onMounted(() => {
         </div>
 
         <!-- Lista de Turmas -->
-        <section class="grid grid-cols-3 gap-4">
+        <section class="grid grid-cols-3 gap-4 max-md:grid-cols-1">
             <CardClass v-for="classItem in classes" :key="classItem._id" :class-item="classItem" />
         </section>
     </AppLayout>

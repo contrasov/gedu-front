@@ -59,7 +59,7 @@ const routes: Array<RouteRecordRaw & { meta: RouteMeta }> = [
         path: '/courses/:id',
         name: 'CourseInfo',
         component: InfoCourse,
-        meta: {title: 'Cursos', requiresAuth: true}
+        meta: {title: 'Informação do Curso', requiresAuth: true}
     },
     {
         path: '/students',

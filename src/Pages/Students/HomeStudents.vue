@@ -28,7 +28,7 @@ onMounted(() => {
         <div class="flex flex-row justify-between mb-6">
             <h1 class="text-2xl font-bold">Alunos</h1>
         </div>
-        <section class="grid grid-cols-3 gap-4">
+        <section class="grid grid-cols-3 gap-4 max-md:grid-cols-1">
             <CardStudents v-for="userItem in students" :key="userItem._id" :user-item="userItem" />
         </section>
     </AppLayout>
